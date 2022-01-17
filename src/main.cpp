@@ -100,7 +100,8 @@ void renderScene(void)
 void init(void)
 {
 
-    sphere = new Sphere(numberOfVertices, displayNormals);
+    sphere = new Sphere(numberOfVertices);
+    sphere->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
     redLightPoint = new LightPoint(0.5, 0.5, 14.0, GL_LIGHT0);

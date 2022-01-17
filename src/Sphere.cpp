@@ -5,14 +5,18 @@
 #include <iostream>
 #include <cmath>
 
-Sphere::Sphere(int n, bool drawNormals)
+Sphere::Sphere(int n)
 {
     this->n = n;
 
     setupVerticesOnPlane();
     transformVertices();
     // calculateNormals();
-    // invertHalfOfTheNormals();
+    this->drawNormals = drawNormals;
+}
+
+void Sphere::setDrawNormals(bool drawNormals)
+{
     this->drawNormals = drawNormals;
 }
 
@@ -209,19 +213,4 @@ void Sphere::display()
 void Sphere::setDisplayMode(DisplayMode mode)
 {
     this->displayMode = mode;
-}
-
-void Sphere::invertHalfOfTheNormals()
-{
-    for (int i = n / 2; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            Vector3f *normal = vertices[i][j]->normal;
-            if (normal->y != -1 && normal->y != 1)
-            {
-                normal->invert();
-            }
-        }
-    }
 }

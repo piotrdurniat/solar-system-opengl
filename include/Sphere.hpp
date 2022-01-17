@@ -16,13 +16,13 @@ class Sphere
 private:
     int n = 20;
     DisplayMode displayMode = DisplayMode::mesh;
-    bool drawNormals;
+    bool drawNormals = false;
 
     // 2d Array holding the vertices of the model:
     Vertex ***vertices;
 
 public:
-    Sphere(int n, bool drawNormals);
+    Sphere(int n);
     // Translate the vertices according to a given formula to form an egg shape
     void transformVertices();
     // Sets up a 2d plain consisting of n x n vertices.
@@ -37,8 +37,8 @@ public:
     void display();
     void setDisplayMode(DisplayMode mode);
     void calculateNormals();
-    void invertHalfOfTheNormals();
     void drawNormal(Vertex *v);
+    void setDrawNormals(bool drawNormals);
 };
 
 #endif
