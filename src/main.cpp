@@ -100,7 +100,7 @@ void renderScene(void)
 void init(void)
 {
 
-    sphere = new Sphere(numberOfVertices, 5.0f);
+    sphere = new Sphere(sectorCount, stackCount, 5.0f);
     sphere->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
@@ -110,7 +110,7 @@ void init(void)
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
     redLightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    sphere->setDisplayMode(DisplayMode::filledTriangles);
+    sphere->setDisplayMode(DisplayMode::mesh);
 
     // background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
         po::options_description desc{"Options"};
 
         //@formatter:off
-        desc.add_options()("help,h", "Help screen")("number,n", po::value<int>()->default_value(40), "Number of vertices")("dispNorm,d", "Display model normals on screen");
+        desc.add_options()("help,h", "Help screen")("sectorCount", po::value<int>()->default_value(40), "Number of sectors")("stackCount", po::value<int>()->default_value(40), "Number of stacks")("dispNorm,d", "Display model normals on screen");
         //@formatter:on
 
         po::variables_map vm;
@@ -218,10 +218,15 @@ int main(int argc, char *argv[])
             std::cout << desc << '\n';
             return 1;
         }
-        if (vm.count("number"))
+        if (vm.count("sectorCount"))
         {
-            std::cout << "Number of vertices was set to: " << vm["number"].as<int>() << '\n';
-            numberOfVertices = vm["number"].as<int>();
+            std::cout << "Number of sectors was set to: " << vm["sectorCount"].as<int>() << '\n';
+            sectorCount = vm["sectorCount"].as<int>();
+        }
+        if (vm.count("stackCount"))
+        {
+            std::cout << "Number of stacks was set to: " << vm["stackCount"].as<int>() << '\n';
+            stackCount = vm["stackCount"].as<int>();
         }
         if (vm.count("dispNorm"))
         {

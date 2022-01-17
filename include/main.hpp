@@ -11,7 +11,8 @@
 #include <Viewer.hpp>
 #include <Sphere.hpp>
 
-static int numberOfVertices;
+static int sectorCount;
+static int stackCount;
 static Viewer *viewer;
 static Sphere *sphere;
 static LightPoint *redLightPoint;

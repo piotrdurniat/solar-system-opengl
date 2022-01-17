@@ -5,9 +5,12 @@
 #include <iostream>
 #include <cmath>
 
-Sphere::Sphere(int n, GLfloat radius)
+Sphere::Sphere(int sectorCount, int stackCount, GLfloat radius)
 {
-    this->n = n;
+
+    this->sectorCount = sectorCount;
+    this->stackCount = stackCount;
+
     this->radius = radius;
 
     setupVerticesOnPlane();
@@ -23,15 +26,12 @@ void Sphere::setDrawNormals(bool drawNormals)
 
 void Sphere::transformVertices()
 {
-    const float sectorCount = n - 1;
-    const float stackCount = n - 1;
-
     float lengthInv = 1.0f / radius;
 
-    float sectorStep = 2 * M_PI / sectorCount;
-    float stackStep = M_PI / stackCount;
+    float sectorStep = 2 * M_PI / (sectorCount - 1);
+    float stackStep = M_PI / (stackCount - 1);
 
-    for (int i = 0; i <= stackCount; ++i)
+    for (int i = 0; i < stackCount; ++i)
     {
         float stackAngle = M_PI / 2 - i * stackStep; // starting from pi/2 to -pi/2
         float xy = radius * cosf(stackAngle);        // r * cos(u)
@@ -39,7 +39,7 @@ void Sphere::transformVertices()
 
         // add (sectorCount+1) vertices per stack
         // the first and last vertices have same position and normal, but different tex coords
-        for (int j = 0; j <= sectorCount; ++j)
+        for (int j = 0; j < sectorCount; ++j)
         {
             float sectorAngle = j * sectorStep; // starting from 0 to 2pi
 
@@ -66,16 +66,16 @@ void Sphere::transformVertices()
 
 void Sphere::setupVerticesOnPlane()
 {
-    vertices = new Vertex **[n];
+    vertices = new Vertex **[stackCount];
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < stackCount; ++i)
     {
-        vertices[i] = new Vertex *[n];
+        vertices[i] = new Vertex *[sectorCount];
 
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < sectorCount; ++j)
         {
-            float x = (float)i / (n - 1);
-            float y = (float)j / (n - 1);
+            float x = (float)i / (stackCount - 1);
+            float y = (float)j / (sectorCount - 1);
 
             vertices[i][j] = new Vertex(x, y, 0.0f);
             vertices[i][j]->setNormal(x, y, 0.0f);
@@ -86,9 +86,9 @@ void Sphere::setupVerticesOnPlane()
 
 void Sphere::printVertices()
 {
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < stackCount; ++i)
     {
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < sectorCount; ++j)
         {
             Vertex *vertex = vertices[i][j];
             printVertex(vertex);
@@ -107,9 +107,9 @@ void Sphere::displayVertices()
 
     glColor3ub(255, 255, 255);
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < stackCount; ++i)
     {
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < sectorCount; ++j)
         {
             Vertex *vertex = vertices[i][j];
             glVertex3f(vertex->x, vertex->y, vertex->z);
@@ -147,9 +147,9 @@ void Sphere::addVertex(Vertex *v)
 void Sphere::displayMesh(GLenum mode)
 {
 
-    for (int j = 0; j < n - 1; ++j)
+    for (int i = 0; i < stackCount - 1; ++i)
     {
-        for (int i = 0; i < n; ++i)
+        for (int j = 0; j < sectorCount - 1; ++j)
         {
 
             // this vertex
@@ -158,12 +158,12 @@ void Sphere::displayMesh(GLenum mode)
             Vertex *vertex1 = vertices[x1][y1];
 
             // top neighbor
-            int x2 = (i + 1) % n;
+            int x2 = (i + 1) % stackCount;
             int y2 = j;
             Vertex *vertex2 = vertices[x2][y2];
 
             // top-right neighbor
-            int x3 = (i + 1) % n;
+            int x3 = (i + 1) % sectorCount;
             int y3 = j + 1;
             Vertex *vertex3 = vertices[x3][y3];
 
@@ -194,8 +194,6 @@ void Sphere::displayMesh(GLenum mode)
 
 void Sphere::display()
 {
-    glTranslatef(0, -5, 0);
-
     switch (displayMode)
     {
     case DisplayMode::vertices:
