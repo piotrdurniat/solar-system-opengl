@@ -5,9 +5,10 @@
 #include <iostream>
 #include <cmath>
 
-Sphere::Sphere(int n)
+Sphere::Sphere(int n, GLfloat radius)
 {
     this->n = n;
+    this->radius = radius;
 
     setupVerticesOnPlane();
     transformVertices();
@@ -24,7 +25,6 @@ void Sphere::transformVertices()
 {
     const float sectorCount = n - 1;
     const float stackCount = n - 1;
-    const float radius = 5;
 
     float lengthInv = 1.0f / radius;
 

@@ -100,7 +100,7 @@ void renderScene(void)
 void init(void)
 {
 
-    sphere = new Sphere(numberOfVertices);
+    sphere = new Sphere(numberOfVertices, 5.0f);
     sphere->setDrawNormals(displayNormals);
     viewer = new Viewer();
 

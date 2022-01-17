@@ -15,6 +15,10 @@ class Sphere
 {
 private:
     int n = 20;
+
+    // The radius of this sphere
+    GLfloat radius;
+
     DisplayMode displayMode = DisplayMode::mesh;
     bool drawNormals = false;
 
@@ -22,7 +26,7 @@ private:
     Vertex ***vertices;
 
 public:
-    Sphere(int n);
+    Sphere(int n, GLfloat radius);
     // Translate the vertices according to a given formula to form an egg shape
     void transformVertices();
     // Sets up a 2d plain consisting of n x n vertices.
