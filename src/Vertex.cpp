@@ -39,3 +39,10 @@ void Vertex::setTexturePos(GLfloat x, GLfloat y)
     this->texturePos[0] = x;
     this->texturePos[1] = y;
 }
+
+void Vertex::setPos(GLfloat x, GLfloat y, GLfloat z)
+{
+    this->x = x;
+    this->y = y;
+    this->z = z;
+}

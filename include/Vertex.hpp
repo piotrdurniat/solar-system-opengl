@@ -28,6 +28,7 @@ public:
     float getMagnitude();
     void setNormal(GLfloat x, GLfloat y, GLfloat z);
     void setTexturePos(GLfloat x, GLfloat y);
+    void setPos(GLfloat x, GLfloat y, GLfloat z);
 };
 
 #endif

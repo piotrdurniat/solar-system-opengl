@@ -11,63 +11,51 @@ Sphere::Sphere(int n, bool drawNormals)
 
     setupVerticesOnPlane();
     transformVertices();
-    calculateNormals();
-    invertHalfOfTheNormals();
+    // calculateNormals();
+    // invertHalfOfTheNormals();
     this->drawNormals = drawNormals;
 }
 
 void Sphere::transformVertices()
 {
-    for (int i = 0; i < n; ++i)
+    const float sectorCount = n - 1;
+    const float stackCount = n - 1;
+    const float radius = 5;
+
+    float lengthInv = 1.0f / radius;
+
+    float sectorStep = 2 * M_PI / sectorCount;
+    float stackStep = M_PI / stackCount;
+
+    for (int i = 0; i <= stackCount; ++i)
     {
-        for (int j = 0; j < n; ++j)
+        float stackAngle = M_PI / 2 - i * stackStep; // starting from pi/2 to -pi/2
+        float xy = radius * cosf(stackAngle);        // r * cos(u)
+        float z = radius * sinf(stackAngle);         // r * sin(u)
+
+        // add (sectorCount+1) vertices per stack
+        // the first and last vertices have same position and normal, but different tex coords
+        for (int j = 0; j <= sectorCount; ++j)
         {
-            Vertex *vertex = vertices[i][j];
-            float u = vertex->x;
-            float v = vertex->y;
+            float sectorAngle = j * sectorStep; // starting from 0 to 2pi
 
-            vertex->x = (-90.0 * pow(u, 5) + 225.0 * pow(u, 4) - 270.0 * pow(u, 3) + 180.0 * pow(u, 2) - 45.0 * u) * cos(M_PI * v);
-            vertex->y = (160.0 * pow(u, 4) - 320.0 * pow(u, 3) + 160.0 * pow(u, 2));
-            vertex->z = (-90.0 * pow(u, 5) + 225.0 * pow(u, 4) - 270.0 * pow(u, 3) + 180.0 * pow(u, 2) - 45.0 * u) * sin(M_PI * v);
-        }
-    }
-}
+            // vertex position
+            float x = xy * cosf(sectorAngle); // r * cos(u) * cos(v)
+            float y = xy * sinf(sectorAngle); // r * cos(u) * sin(v)
 
-void Sphere::calculateNormals()
-{
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            Vector3f *normal = vertices[i][j]->normal;
-            float u = normal->x;
-            float v = normal->y;
+            vertices[i][j]->setPos(x, y, z);
 
-            float x_u = (-450.0 * pow(u, 4) + 900.0 * pow(u, 3) - 810.0 * pow(u, 2) + 360.0 * u - 45.0) * cos(M_PI * v);
-            float x_v = M_PI * (90.0 * pow(u, 5) - 225.0 * pow(u, 4) + 270.0 * pow(u, 3) - 180.0 * pow(u, 2) + 45.0 * u) * sin(M_PI * v);
-            float y_u = 640.0 * pow(u, 3) - 960.0 * pow(u, 2) + 320.0 * u;
-            float y_v = 0.0;
-            float z_u = (-450.0 * pow(u, 4) + 900.0 * pow(u, 3) - 810.0 * pow(u, 2) + 360.0 * u - 45.0) * sin(M_PI * v);
-            float z_v = -M_PI * (90.0 * pow(u, 5) - 225.0 * pow(u, 4) + 270.0 * pow(u, 3) - 180.0 * pow(u, 2) + 45.0 * u) * cos(M_PI * v);
+            // normalized vertex normal
+            float nx = x * lengthInv;
+            float ny = y * lengthInv;
+            float nz = z * lengthInv;
+            vertices[i][j]->setNormal(nx, ny, nz);
+            // addNormal(nx, ny, nz);
 
-            normal->x = y_u * z_v - z_u * y_v;
-            normal->y = z_u * x_v - x_u * z_v;
-            normal->z = x_u * y_v - y_u * x_v;
-
-            if (normal->x == 0.0 && normal->y == 0.0 && normal->z == 0)
-            {
-                Vertex *v = vertices[i][j];
-                if (v->y == 0.0)
-                {
-                    normal->y = -1.0;
-                }
-                else
-                {
-                    normal->y = 1.0;
-                }
-            }
-
-            normal->normalize();
+            // // vertex tex coord between [0, 1]
+            // float s = (float)j / sectorCount;
+            // float t = (float)i / stackCount;
+            // addTexCoord(s, t);
         }
     }
 }
@@ -142,6 +130,8 @@ void Sphere::drawNormal(Vertex *v)
 
 void Sphere::addVertex(Vertex *v)
 {
+    glColor3ub(255, 255, 255);
+
     Vector3f *normal = v->normal;
 
     glNormal3f(normal->x, normal->y, normal->z);
@@ -152,8 +142,6 @@ void Sphere::addVertex(Vertex *v)
 
 void Sphere::displayMesh(GLenum mode)
 {
-
-    glColor3ub(255, 255, 255);
 
     for (int j = 0; j < n - 1; ++j)
     {
@@ -185,45 +173,6 @@ void Sphere::displayMesh(GLenum mode)
             {
                 drawNormal(vertices[i][j]);
             }
-            // glColor3ub(255, 255, 255);
-
-            glBegin(mode);
-
-            addVertex(vertex1);
-            addVertex(vertex2);
-            addVertex(vertex3);
-            addVertex(vertex1);
-            addVertex(vertex4);
-            addVertex(vertex3);
-
-            glEnd();
-        }
-    }
-
-    // Fill in the missing column
-    {
-        for (int i = 0; i < n; ++i)
-        {
-            // this vertex
-            int x1 = i;
-            int y1 = n - 1;
-            Vertex *vertex1 = vertices[x1][y1];
-
-            // top neighbor
-            // int x2 = i + 1;
-            int x2 = (i + 1) % n;
-            int y2 = n - 1;
-            Vertex *vertex2 = vertices[x2][y2];
-
-            // top-right neighbor
-            int x3 = n - i - 1;
-            int y3 = 0;
-            Vertex *vertex3 = vertices[x3][y3];
-
-            // right neighbor
-            int x4 = (n - i) % n;
-            int y4 = 0;
-            Vertex *vertex4 = vertices[x4][y4];
 
             glBegin(mode);
 

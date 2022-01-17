@@ -46,3 +46,4 @@ void lightControlMode();
 void viewerControlMode();
 void keys(unsigned char key, int x, int y);
 int main(int argc, char *argv[]);
+void setupMaterial();
