@@ -8,7 +8,6 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
-#include "Color.hpp"
 #include "Vector3f.hpp"
 
 typedef GLfloat point2[2];
@@ -19,7 +18,6 @@ public:
     float x;
     float y;
     float z;
-    Color *color;
     Vector3f *normal;
     point2 texturePos;
 

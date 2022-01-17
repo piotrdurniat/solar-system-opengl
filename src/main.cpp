@@ -91,88 +91,16 @@ void renderScene(void)
 
     drawAxes();
 
-    // switch (viewModel)
-    // {
-    // case 1:
-    //     egg->display();
-    //     break;
+    sphere->display();
 
-    // case 2:
-    //     pyramid->display();
-    //     break;
-    // }
     glFlush();
     glutSwapBuffers();
 }
 
-void setupMaterial()
-{
-    // Definicja materiału z jakiego zrobiony jest czajnik
-
-    GLfloat mat_ambient[] = {1.0, 1.0, 1.0, 1.0};
-    // współczynniki ka =[kar,kag,kab] dla światła otoczenia
-
-    GLfloat mat_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-    // współczynniki kd =[kdr,kdg,kdb] światła rozproszonego
-
-    GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
-    // współczynniki ks =[ksr,ksg,ksb] dla światła odbitego
-
-    GLfloat mat_shininess = {20.0};
-    // współczynnik n opisujący połysk powierzchni
-
-    /*************************************************************************************/
-    // Ustawienie parametrów materiału i źródła światła
-
-    redLightPoint->setup();
-    // blueLightPoint->setup();
-
-    /*************************************************************************************/
-    // Ustawienie patrametrów materiału
-
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
-
-    /*************************************************************************************/
-    // Ustawienie opcji systemu oświetlania sceny
-
-    glShadeModel(GL_SMOOTH); // właczenie łagodnego cieniowania
-    glEnable(GL_LIGHTING);   // właczenie systemu oświetlenia sceny
-
-    redLightPoint->enable();
-    // blueLightPoint->enable();
-
-    glEnable(GL_DEPTH_TEST); // włączenie mechanizmu z-bufora
-
-    /*************************************************************************************/
-}
-
-void loadTexture(const char *fileName)
-{
-    GLbyte *pBytes;
-    GLint ImWidth, ImHeight, ImComponents;
-    GLenum ImFormat;
-
-    //  Load texture
-    pBytes = LoadTGAImage(fileName, &ImWidth, &ImHeight, &ImComponents, &ImFormat);
-    // Define texture
-    glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
-    // Free memory
-    free(pBytes);
-}
-
 void init(void)
 {
-    loadTexture("../textures/easter-egg.tga");
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE_2D);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    sphere = new Sphere(numberOfVertices, displayNormals);
     viewer = new Viewer();
 
     redLightPoint = new LightPoint(0.5, 0.5, 14.0, GL_LIGHT0);
@@ -181,15 +109,10 @@ void init(void)
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
     redLightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    // blueLightPoint = new LightPoint(0.5, -0.5, 10.0, GL_LIGHT1);
-
-    // blueLightPoint->setAmbient(0.0, 0.0, 0.1, 1.0);
-    // blueLightPoint->setDiffuse(0.0, 0.0, 1.0, 1.0);
-    // blueLightPoint->setSpecular(0.0, 0.0, 1.0, 1.0);
+    sphere->setDisplayMode(DisplayMode::filledTriangles);
 
     // background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    setupMaterial();
 }
 
 void changeSize(GLsizei horizontal, GLsizei vertical)
@@ -246,9 +169,9 @@ void motion(GLsizei x, GLsizei y)
 void lightControlMode()
 {
     controlMode = 1;
-    printf("\nSterowanie polezoniem zrodel swiatla\n\n");
-    printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla pierwszego zrodla.\n");
-    printf("Przy wcisnietym prawym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla drugiego zrodla.\n");
+    printf("\nSterowanie polezoniem zrodla swiatla\n\n");
+    printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
+    printf("Przy wcisnietym prawym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
 }
 
 void viewerControlMode()
@@ -264,22 +187,11 @@ void keys(unsigned char key, int x, int y)
 {
     switch (key)
     {
-
     case '1':
         lightControlMode();
         break;
     case '2':
         viewerControlMode();
-        break;
-    case '3':
-        viewModel = 1;
-        printf("\nModel jajka\n");
-        loadTexture("../textures/easter-egg.tga");
-        break;
-    case '4':
-        viewModel = 2;
-        printf("\nModel piramidy\n");
-        loadTexture("../textures/P3_t.tga");
         break;
     }
     renderScene();
@@ -326,8 +238,6 @@ int main(int argc, char *argv[])
     printf("Sterowanie: \n");
     printf("Klawisz \"1\" - przelaczenie trybu na sterowanie polozeniem swiatla\n");
     printf("Klawisz \"2\" - przelaczenie trybu na sterowanie polozeniem obserwatora\n");
-    printf("Klawisz \"3\" - przelaczenie trybu na model jajka\n");
-    printf("Klawisz \"4\" - przelaczenie trybu na model czajnika\n");
 
     glutInit(&argc, argv);
 
@@ -335,7 +245,7 @@ int main(int argc, char *argv[])
 
     glutInitWindowSize(800, 800);
 
-    glutCreateWindow("GKiKCK - laboratorium 6");
+    glutCreateWindow("GKiKCK - laboratorium 7");
 
     glutDisplayFunc(renderScene);
     glutReshapeFunc(changeSize);

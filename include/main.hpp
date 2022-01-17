@@ -9,9 +9,11 @@
 #include <iostream>
 #include <LightPoint.hpp>
 #include <Viewer.hpp>
+#include <Sphere.hpp>
 
 static int numberOfVertices;
 static Viewer *viewer;
+static Sphere *sphere;
 static LightPoint *redLightPoint;
 // static LightPoint *blueLightPoint;
 
@@ -36,7 +38,6 @@ static int mousePosOld[2] = {0, 0};
 
 void drawAxes(void);
 void renderScene(void);
-void setupMaterial();
 void init(void);
 void changeSize(GLsizei horizontal, GLsizei vertical);
 void mouse(int btn, int state, int x, int y);
