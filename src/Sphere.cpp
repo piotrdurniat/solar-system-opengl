@@ -57,9 +57,9 @@ void Sphere::transformVertices()
             // addNormal(nx, ny, nz);
 
             // // vertex tex coord between [0, 1]
-            // float s = (float)j / sectorCount;
-            // float t = (float)i / stackCount;
-            // addTexCoord(s, t);
+            float s = (float)j / (sectorCount - 1);
+            float t = (float)i / (stackCount - 1);
+            vertices[i][j]->setTexturePos(s, t);
         }
     }
 }

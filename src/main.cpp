@@ -100,6 +100,14 @@ void renderScene(void)
 void init(void)
 {
 
+    loadTexture("../textures/earth.tga");
+
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     sphere = new Sphere(sectorCount, stackCount, 5.0f);
     sphere->setDrawNormals(displayNormals);
     viewer = new Viewer();
@@ -110,7 +118,7 @@ void init(void)
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
     redLightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    sphere->setDisplayMode(DisplayMode::mesh);
+    sphere->setDisplayMode(DisplayMode::filledTriangles);
 
     // background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -309,4 +317,18 @@ void setupMaterial()
     glEnable(GL_DEPTH_TEST); // włączenie mechanizmu z-bufora
 
     /*************************************************************************************/
+}
+
+void loadTexture(const char *fileName)
+{
+    GLbyte *pBytes;
+    GLint ImWidth, ImHeight, ImComponents;
+    GLenum ImFormat;
+
+    //  Load texture
+    pBytes = LoadTGAImage(fileName, &ImWidth, &ImHeight, &ImComponents, &ImFormat);
+    // Define texture
+    glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
+    // Free memory
+    free(pBytes);
 }
