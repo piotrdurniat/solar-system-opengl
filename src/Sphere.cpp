@@ -188,6 +188,10 @@ void Sphere::displayMesh(GLenum mode)
 
 void Sphere::display()
 {
+    glPushMatrix();
+
+    glRotatef(90, 1, 0, 0);
+
     switch (displayMode)
     {
     case DisplayMode::vertices:
@@ -200,6 +204,8 @@ void Sphere::display()
         displayMesh(GL_TRIANGLE_STRIP);
         break;
     }
+
+    glPopMatrix();
 }
 
 void Sphere::setDisplayMode(DisplayMode mode)
