@@ -99,8 +99,9 @@ void renderScene(void)
 
 void init(void)
 {
-
-    loadTexture("../textures/earth.tga");
+    Texture *texture = new Texture();
+    texture->load("../textures/earth.tga");
+    texture->set();
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
@@ -319,16 +320,16 @@ void setupMaterial()
     /*************************************************************************************/
 }
 
-void loadTexture(const char *fileName)
-{
-    GLbyte *pBytes;
-    GLint ImWidth, ImHeight, ImComponents;
-    GLenum ImFormat;
+// void loadTexture(const char *fileName)
+// {
+//     GLbyte *pBytes;
+//     GLint ImWidth, ImHeight, ImComponents;
+//     GLenum ImFormat;
 
-    //  Load texture
-    pBytes = LoadTGAImage(fileName, &ImWidth, &ImHeight, &ImComponents, &ImFormat);
-    // Define texture
-    glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
-    // Free memory
-    free(pBytes);
-}
+//     //  Load texture
+//     pBytes = Texture::LoadTGAImage(fileName, &ImWidth, &ImHeight, &ImComponents, &ImFormat);
+//     // Define texture
+//     glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
+//     // Free memory
+//     free(pBytes);
+// }

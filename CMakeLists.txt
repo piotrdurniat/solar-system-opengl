@@ -14,7 +14,7 @@ if (WIN32)
 endif()
 
 include_directories("include")
-add_executable(main "src/main.cpp" "src/Sphere.cpp" "src/Vertex.cpp" "src/Vector3f.cpp" "src/LightPoint.cpp" "src/Viewer.cpp")
+add_executable(main "src/main.cpp" "src/Sphere.cpp" "src/Vertex.cpp" "src/Vector3f.cpp" "src/LightPoint.cpp" "src/Viewer.cpp" "src/Texture.cpp")
 
 if(NOT MSVC)
     find_package(Boost REQUIRED COMPONENTS program_options)
