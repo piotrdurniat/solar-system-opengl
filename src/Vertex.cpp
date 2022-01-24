@@ -3,17 +3,20 @@
 
 Vertex::Vertex()
 {
-    this->x = 0.0f;
-    this->y = 0.0f;
-    this->z = 0.0f;
+    this->normal = new Vector3f();
+}
+
+Vertex::~Vertex()
+{
+    delete this->normal;
 }
 
 Vertex::Vertex(float x, float y, float z)
 {
+    Vertex();
     this->x = x;
     this->y = y;
     this->z = z;
-    this->normal = new Vector3f();
 }
 
 float Vertex::getMagnitude()

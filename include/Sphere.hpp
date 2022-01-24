@@ -32,7 +32,7 @@ public:
     void transformVertices();
     // Sets up a 2d plain consisting of n x n vertices.
     // Each coordinate (x, y, z) has a value >= 0 and <= 1.
-    void setupVerticesOnPlane();
+    void setupVerticesArray();
     // prints the position of all the vertices to the standard output
     void printVertices();
     void printVertex(Vertex *v);

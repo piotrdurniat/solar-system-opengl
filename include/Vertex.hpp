@@ -22,6 +22,7 @@ public:
     point2 texturePos;
 
     Vertex();
+    ~Vertex();
     Vertex(float x, float y, float z);
 
     void normalize();

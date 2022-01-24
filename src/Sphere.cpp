@@ -13,9 +13,8 @@ Sphere::Sphere(int sectorCount, int stackCount, GLfloat radius)
 
     this->radius = radius;
 
-    setupVerticesOnPlane();
+    setupVerticesArray();
     transformVertices();
-    // calculateNormals();
     this->drawNormals = drawNormals;
 }
 
@@ -64,7 +63,7 @@ void Sphere::transformVertices()
     }
 }
 
-void Sphere::setupVerticesOnPlane()
+void Sphere::setupVerticesArray()
 {
     vertices = new Vertex **[stackCount];
 
@@ -74,12 +73,7 @@ void Sphere::setupVerticesOnPlane()
 
         for (int j = 0; j < sectorCount; ++j)
         {
-            float x = (float)i / (stackCount - 1);
-            float y = (float)j / (sectorCount - 1);
-
-            vertices[i][j] = new Vertex(x, y, 0.0f);
-            vertices[i][j]->setNormal(x, y, 0.0f);
-            vertices[i][j]->setTexturePos(x, y);
+            vertices[i][j] = new Vertex();
         }
     }
 }
