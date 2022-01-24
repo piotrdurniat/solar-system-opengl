@@ -13,7 +13,7 @@
 
 class Sphere
 {
-private:
+protected:
     // The radius of this sphere
     GLfloat radius;
 

@@ -1,6 +1,5 @@
 #include "main.hpp"
 #include <boost/program_options.hpp>
-#include <Texture.hpp>
 
 namespace po = boost::program_options;
 
@@ -91,7 +90,8 @@ void renderScene(void)
 
     drawAxes();
 
-    sphere->display();
+    mercury->display();
+    venus->display();
 
     glFlush();
     glutSwapBuffers();
@@ -99,9 +99,6 @@ void renderScene(void)
 
 void init(void)
 {
-    Texture *texture = new Texture();
-    texture->load("../textures/earth.tga");
-    texture->set();
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
@@ -109,8 +106,12 @@ void init(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    sphere = new Sphere(sectorCount, stackCount, 5.0f);
-    sphere->setDrawNormals(displayNormals);
+    // sphere = new Sphere(sectorCount, stackCount, 5.0f);
+
+    mercury = new Planet(1.5, 1, "../textures/mercury.tga");
+    venus = new Planet(1.5, 4, "../textures/venus.tga");
+
+    // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
     redLightPoint = new LightPoint(0.5, 0.5, 14.0, GL_LIGHT0);
@@ -119,7 +120,7 @@ void init(void)
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
     redLightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    sphere->setDisplayMode(DisplayMode::filledTriangles);
+    // sphere->setDisplayMode(DisplayMode::filledTriangles);
 
     // background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

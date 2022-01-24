@@ -7,16 +7,19 @@
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
-#include <LightPoint.hpp>
-#include <Viewer.hpp>
-#include <Sphere.hpp>
+
+#include "LightPoint.hpp"
+#include "Viewer.hpp"
+#include "Planet.hpp"
 
 static int sectorCount;
 static int stackCount;
 static Viewer *viewer;
-static Sphere *sphere;
 static LightPoint *redLightPoint;
 // static LightPoint *blueLightPoint;
+
+static Planet *mercury;
+static Planet *venus;
 
 typedef float point3[3];
 
