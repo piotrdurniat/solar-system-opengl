@@ -18,8 +18,17 @@ static Viewer *viewer;
 static LightPoint *redLightPoint;
 // static LightPoint *blueLightPoint;
 
+// Temporarly sun is a planet
+static Planet *sun;
+
 static Planet *mercury;
 static Planet *venus;
+static Planet *earth;
+static Planet *mars;
+static Planet *jupiter;
+static Planet *saturn;
+static Planet *uranus;
+static Planet *neptune;
 
 typedef float point3[3];
 

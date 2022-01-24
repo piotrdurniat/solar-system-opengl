@@ -21,7 +21,7 @@ void Planet::display()
 
     glPushMatrix();
 
-    glTranslatef(distFromTheSun, 0, 0);
+    glTranslatef(distFromTheSun, 0.0, 0.0);
 
     this->Sphere::display();
 

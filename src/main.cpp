@@ -90,8 +90,16 @@ void renderScene(void)
 
     drawAxes();
 
+    sun->display();
+
     mercury->display();
     venus->display();
+    earth->display();
+    mars->display();
+    jupiter->display();
+    saturn->display();
+    uranus->display();
+    neptune->display();
 
     glFlush();
     glutSwapBuffers();
@@ -108,8 +116,40 @@ void init(void)
 
     // sphere = new Sphere(sectorCount, stackCount, 5.0f);
 
-    mercury = new Planet(1.5, 1, "../textures/mercury.tga");
-    venus = new Planet(1.5, 4, "../textures/venus.tga");
+    float scale = 10000;
+
+    float sunR = 26000.0 / scale;
+
+    float mercuryR = 2439.7 / scale;
+    float venusR = 6051.8 / scale;
+    float earthR = 6371.0 / scale;
+    float marsR = 3389.5 / scale;
+    float jupiterR = 16000.0 / scale;
+    float saturnR = 12000.0 / scale;
+    float uranusR = 9000.0 / scale;
+    float neptuneR = 8500.0 / scale;
+
+    float spacing = 4000.0 / scale;
+
+    float mercuryDist = sunR + mercuryR + spacing;
+    float venusDist = mercuryDist + mercuryR + venusR + spacing;
+    float earthDist = venusDist + venusR + earthR + spacing;
+    float marsDist = earthDist + earthR + marsR + spacing;
+    float jupiterDist = marsDist + marsR + jupiterR + spacing;
+    float saturnDist = jupiterDist + jupiterR + saturnR + spacing;
+    float uranusDist = saturnDist + saturnR + uranusR + spacing;
+    float neptuneDist = uranusDist + uranusR + neptuneR + spacing;
+
+    sun = new Planet(sunR, 0.0, "../textures/sun.tga");
+
+    mercury = new Planet(mercuryR, mercuryDist, "../textures/mercury.tga");
+    venus = new Planet(venusR, venusDist, "../textures/venus.tga");
+    earth = new Planet(earthR, earthDist, "../textures/earth.tga");
+    mars = new Planet(marsR, marsDist, "../textures/mars.tga");
+    jupiter = new Planet(jupiterR, jupiterDist, "../textures/jupiter.tga");
+    saturn = new Planet(saturnR, saturnDist, "../textures/saturn.tga");
+    uranus = new Planet(uranusR, uranusDist, "../textures/uranus.tga");
+    neptune = new Planet(neptuneR, neptuneDist, "../textures/neptune.tga");
 
     // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
@@ -131,7 +171,7 @@ void changeSize(GLsizei horizontal, GLsizei vertical)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70, 1.0, 1.0, 30.0);
+    gluPerspective(70, 1.0, 1.0, 30000.0);
 
     if (horizontal <= vertical)
     {
