@@ -79,7 +79,7 @@ void renderScene(void)
     sun->display();
     sky->display();
 
-    for (Planet *planet : planets)
+    for (CelestialBody *planet : planets)
     {
         planet->display();
     }
@@ -96,19 +96,19 @@ void init(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    float scale = 10000;
+    GLfloat scale = 10000;
 
-    float sunR = 26000.0 / scale;
+    GLfloat sunR = 26000.0 / scale;
 
     GLfloat radiuses[planetCount] = {
-        2439.7 / scale,
-        6051.8 / scale,
-        6371.0 / scale,
-        3389.5 / scale,
-        16000.0 / scale,
-        12000.0 / scale,
-        9000.0 / scale,
-        8500.0 / scale};
+        2439.7f / scale,
+        6051.8f / scale,
+        6371.0f / scale,
+        3389.5f / scale,
+        16000.0f / scale,
+        12000.0f / scale,
+        9000.0f / scale,
+        8500.0f / scale};
 
     float spacing = 4000.0 / scale;
 
@@ -123,8 +123,8 @@ void init(void)
         "../textures/neptune.tga"};
 
     // I know, sun is not a planet...
-    sun = new Planet(sunR, 0.0, 0.0, 0.0, "../textures/sun.tga");
-    sky = new Planet(skyR, 0.0, 0.0, 0.0, "../textures/sky.tga");
+    sun = new CelestialBody(sunR, 0.0, 0.0, 0.0, "../textures/sun.tga");
+    sky = new CelestialBody(skyR, 0.0, 0.0, 0.0, "../textures/sky.tga");
 
     sun->invertNormals();
     sky->invertNormals();
@@ -152,10 +152,19 @@ void init(void)
 
         GLfloat orbitalAngularSpeed = timeScale / orbitalPeriods[i];
 
-        planets[i] = new Planet(radiuses[i], distance, orbitalAngularSpeed, 0.05, textures[i]);
+        planets[i] = new CelestialBody(radiuses[i], distance, orbitalAngularSpeed, 0.5, textures[i]);
     }
 
-    // ->setDrawNormals(displayNormals);
+    const GLfloat moonR = 1737.5 / scale;
+
+    CelestialBody *moon = new CelestialBody(moonR, 0.9, 13, 13, "../textures/moon.tga");
+
+    // Set earth's axial tilt
+    planets[2]->setAxialTilt(23.4392811);
+
+    // Add the moon to the earth
+    planets[2]->setMoon(moon);
+
     viewer = new Viewer();
 
     lightPoint = new LightPoint(0.0, 0.00001, 0.0, GL_LIGHT0);
@@ -358,7 +367,7 @@ void setupMaterial()
 void update(int value)
 {
 
-    for (Planet *planet : planets)
+    for (CelestialBody *planet : planets)
     {
         planet->update();
     }

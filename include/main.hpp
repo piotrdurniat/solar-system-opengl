@@ -13,18 +13,18 @@
 
 #include "LightPoint.hpp"
 #include "Viewer.hpp"
-#include "Planet.hpp"
+#include "CelestialBody.hpp"
 
 static int sectorCount;
 static int stackCount;
 static Viewer *viewer;
 static LightPoint *lightPoint;
 
-static Planet *sun;
-static Planet *sky;
+static CelestialBody *sun;
+static CelestialBody *sky;
 
 const int planetCount = 8;
-Planet *planets[planetCount];
+CelestialBody *planets[planetCount];
 
 typedef float point3[3];
 

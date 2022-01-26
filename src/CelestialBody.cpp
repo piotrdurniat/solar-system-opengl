@@ -1,6 +1,6 @@
-#include "Planet.hpp"
+#include "CelestialBody.hpp"
 
-Planet::Planet(GLfloat radius, GLfloat distFromTheSun, GLfloat orbitalAngularSpeed, GLfloat rotationalAngularSpeed, const char *textureName) : Sphere(40, 40, radius)
+CelestialBody::CelestialBody(GLfloat radius, GLfloat distFromTheSun, GLfloat orbitalAngularSpeed, GLfloat rotationalAngularSpeed, const char *textureName) : Sphere(40, 40, radius)
 {
     this->distFromTheSun = distFromTheSun;
 
@@ -16,12 +16,17 @@ Planet::Planet(GLfloat radius, GLfloat distFromTheSun, GLfloat orbitalAngularSpe
     texture->load(textureName);
 }
 
-Planet::~Planet()
+CelestialBody::~CelestialBody()
 {
     delete texture;
 }
 
-void Planet::display()
+void CelestialBody::setAxialTilt(GLfloat axialTilt)
+{
+    this->axialTilt = axialTilt;
+}
+
+void CelestialBody::display()
 {
     texture->set();
 
@@ -29,6 +34,14 @@ void Planet::display()
 
     glRotatef(orbitalAngle, 0, 1, 0);
     glTranslatef(distFromTheSun, 0.0, 0.0);
+
+    if (moon != NULL)
+    {
+        this->moon->display();
+    }
+
+    glRotatef(axialTilt, 1, 0, 0);
+
     glRotatef(rotationAngle, 0, 1, 0);
 
     this->Sphere::display();
@@ -36,7 +49,7 @@ void Planet::display()
     glPopMatrix();
 }
 
-void Planet::update()
+void CelestialBody::update()
 {
 
     orbitalAngle += orbitalAngularSpeed;
@@ -45,9 +58,19 @@ void Planet::update()
 
     rotationAngle = wrapTo360(rotationAngle);
     orbitalAngle = wrapTo360(orbitalAngle);
+
+    if (this->moon != NULL)
+    {
+        this->moon->update();
+    }
 }
 
-GLfloat Planet::wrapTo360(GLfloat angle)
+void CelestialBody::setMoon(CelestialBody *moon)
+{
+    this->moon = moon;
+}
+
+GLfloat CelestialBody::wrapTo360(GLfloat angle)
 {
     if (angle >= 360.0)
     {
