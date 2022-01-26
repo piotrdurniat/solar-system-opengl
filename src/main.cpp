@@ -52,7 +52,7 @@ void drawAxes(void)
 
 void renderScene(void)
 {
-    redLightPoint->updatePos();
+    lightPoint->updatePos();
 
     if (mouseStatus == MouseStatus::leftDown)
     {
@@ -139,11 +139,11 @@ void init(void)
     // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
-    redLightPoint = new LightPoint(0.0, 0.00001, 0.0, GL_LIGHT0);
+    lightPoint = new LightPoint(0.0, 0.00001, 0.0, GL_LIGHT0);
 
-    redLightPoint->setAmbient(0.1, 0.1, 0.1, 1.0);
-    redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
-    redLightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
+    lightPoint->setAmbient(0.1, 0.1, 0.1, 1.0);
+    lightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
+    lightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
     // sphere->setDisplayMode(DisplayMode::filledTriangles);
 
@@ -309,7 +309,7 @@ void setupMaterial()
     /*************************************************************************************/
     // Ustawienie parametrów materiału i źródła światła
 
-    redLightPoint->setup();
+    lightPoint->setup();
     // blueLightPoint->setup();
 
     /*************************************************************************************/
@@ -326,7 +326,7 @@ void setupMaterial()
     glShadeModel(GL_SMOOTH); // właczenie łagodnego cieniowania
     glEnable(GL_LIGHTING);   // właczenie systemu oświetlenia sceny
 
-    redLightPoint->enable();
+    lightPoint->enable();
     // blueLightPoint->enable();
 
     glEnable(GL_DEPTH_TEST); // włączenie mechanizmu z-bufora
@@ -336,19 +336,6 @@ void setupMaterial()
 
 void update(int value)
 {
-
-    // const int desiredFPS = 120;
-    // glutTimerFunc(1000 / desiredFPS, timer, ++value);
-
-    // //put your specific idle code here
-    // //... this code will run at desiredFPS
-    // char spinner[] = {'|', '/', '-', '~', '\\'};
-    // printf("%c", spinner[value % sizeof(spinner) / sizeof(char)]);
-    // //end your specific idle code here
-
-    // // FPS(); //only call once per frame loop to measure FPS
-    // sun->update();
-
     mercury->update();
     venus->update();
     earth->update();
@@ -359,10 +346,7 @@ void update(int value)
     neptune->update();
 
     glutTimerFunc(updateInterval, update, 0);
-
     glutPostRedisplay();
-
-    // glutPostRedisplay();
 }
 
 void timerStart(std::function<void(void)> func, unsigned int interval)

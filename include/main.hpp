@@ -18,7 +18,7 @@
 static int sectorCount;
 static int stackCount;
 static Viewer *viewer;
-static LightPoint *redLightPoint;
+static LightPoint *lightPoint;
 // static LightPoint *blueLightPoint;
 
 // Temporarly sun is a planet
