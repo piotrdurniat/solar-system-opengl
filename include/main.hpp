@@ -19,19 +19,12 @@ static int sectorCount;
 static int stackCount;
 static Viewer *viewer;
 static LightPoint *lightPoint;
-// static LightPoint *blueLightPoint;
 
-// Temporarly sun is a planet
 static Planet *sun;
+static Planet *sky;
 
-static Planet *mercury;
-static Planet *venus;
-static Planet *earth;
-static Planet *mars;
-static Planet *jupiter;
-static Planet *saturn;
-static Planet *uranus;
-static Planet *neptune;
+const int planetCount = 8;
+Planet *planets[planetCount];
 
 typedef float point3[3];
 

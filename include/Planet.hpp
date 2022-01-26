@@ -18,7 +18,7 @@ protected:
     GLfloat rotationAngle;
 
 public:
-    Planet(GLfloat radius, GLfloat distFromTheSun, const char *textureName);
+    Planet(GLfloat radius, GLfloat distFromTheSun, GLfloat orbitalAngularSpeed, GLfloat rotationalAngularSpeed, const char *textureName);
     ~Planet();
     void display();
     void update();

@@ -10,7 +10,7 @@ Viewer::Viewer()
 
     theta = M_PI / 2;
     phi = M_PI / 4;
-    r = 10;
+    r = 14;
 }
 
 void Viewer::thetaAdd(GLfloat x)

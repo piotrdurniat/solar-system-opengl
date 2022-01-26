@@ -1,14 +1,14 @@
 #include "Planet.hpp"
 
-Planet::Planet(GLfloat radius, GLfloat distFromTheSun, const char *textureName) : Sphere(40, 40, radius)
+Planet::Planet(GLfloat radius, GLfloat distFromTheSun, GLfloat orbitalAngularSpeed, GLfloat rotationalAngularSpeed, const char *textureName) : Sphere(40, 40, radius)
 {
     this->distFromTheSun = distFromTheSun;
 
-    this->orbitalAngle = 0.0;
-    this->rotationAngle = 0.0;
+    this->orbitalAngle = rand() % 360;
+    this->rotationAngle = rand() % 360;
 
-    this->orbitalAngularSpeed = 0.2;
-    this->rotationalAngularSpeed = 0.6;
+    this->orbitalAngularSpeed = orbitalAngularSpeed;
+    this->rotationalAngularSpeed = rotationalAngularSpeed;
 
     texture = new Texture();
     setDisplayMode(DisplayMode::filledTriangles);

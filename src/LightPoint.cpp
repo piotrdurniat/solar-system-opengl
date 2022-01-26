@@ -69,9 +69,9 @@ void LightPoint::setup()
     glLightfv(identifier, GL_SPECULAR, specular);
     glLightfv(identifier, GL_POSITION, pos);
 
-    glLightf(identifier, GL_CONSTANT_ATTENUATION, att_constant);
-    glLightf(identifier, GL_LINEAR_ATTENUATION, att_linear);
-    glLightf(identifier, GL_QUADRATIC_ATTENUATION, att_quadratic);
+    // glLightf(identifier, GL_CONSTANT_ATTENUATION, att_constant);
+    // glLightf(identifier, GL_LINEAR_ATTENUATION, att_linear);
+    // glLightf(identifier, GL_QUADRATIC_ATTENUATION, att_quadratic);
 }
 
 void LightPoint::enable()

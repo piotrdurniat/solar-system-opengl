@@ -8,6 +8,8 @@ bool displayNormals = false;
 // Time in ms between each update
 int updateInterval = 15;
 
+GLfloat skyR = 100000;
+
 void drawAxes(void)
 {
     // Start and end position for X axis
@@ -72,18 +74,15 @@ void renderScene(void)
     glLoadIdentity();
 
     viewer->updatePos();
-    drawAxes();
+    // drawAxes();
 
     sun->display();
+    sky->display();
 
-    mercury->display();
-    venus->display();
-    earth->display();
-    mars->display();
-    jupiter->display();
-    saturn->display();
-    uranus->display();
-    neptune->display();
+    for (Planet *planet : planets)
+    {
+        planet->display();
+    }
 
     glFlush();
     glutSwapBuffers();
@@ -91,50 +90,70 @@ void renderScene(void)
 
 void init(void)
 {
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // sphere = new Sphere(sectorCount, stackCount, 5.0f);
-
     float scale = 10000;
 
     float sunR = 26000.0 / scale;
 
-    float mercuryR = 2439.7 / scale;
-    float venusR = 6051.8 / scale;
-    float earthR = 6371.0 / scale;
-    float marsR = 3389.5 / scale;
-    float jupiterR = 16000.0 / scale;
-    float saturnR = 12000.0 / scale;
-    float uranusR = 9000.0 / scale;
-    float neptuneR = 8500.0 / scale;
+    GLfloat radiuses[planetCount] = {
+        2439.7 / scale,
+        6051.8 / scale,
+        6371.0 / scale,
+        3389.5 / scale,
+        16000.0 / scale,
+        12000.0 / scale,
+        9000.0 / scale,
+        8500.0 / scale};
 
     float spacing = 4000.0 / scale;
 
-    float mercuryDist = sunR + mercuryR + spacing;
-    float venusDist = mercuryDist + mercuryR + venusR + spacing;
-    float earthDist = venusDist + venusR + earthR + spacing;
-    float marsDist = earthDist + earthR + marsR + spacing;
-    float jupiterDist = marsDist + marsR + jupiterR + spacing;
-    float saturnDist = jupiterDist + jupiterR + saturnR + spacing;
-    float uranusDist = saturnDist + saturnR + uranusR + spacing;
-    float neptuneDist = uranusDist + uranusR + neptuneR + spacing;
+    const char *textures[planetCount] = {
+        "../textures/mercury.tga",
+        "../textures/venus.tga",
+        "../textures/earth.tga",
+        "../textures/mars.tga",
+        "../textures/jupiter.tga",
+        "../textures/saturn.tga",
+        "../textures/uranus.tga",
+        "../textures/neptune.tga"};
 
-    sun = new Planet(sunR, 0.0, "../textures/sun.tga");
+    // I know, sun is not a planet...
+    sun = new Planet(sunR, 0.0, 0.0, 0.0, "../textures/sun.tga");
+    sky = new Planet(skyR, 0.0, 0.0, 0.0, "../textures/sky.tga");
+
     sun->invertNormals();
+    sky->invertNormals();
 
-    mercury = new Planet(mercuryR, mercuryDist, "../textures/mercury.tga");
-    venus = new Planet(venusR, venusDist, "../textures/venus.tga");
-    earth = new Planet(earthR, earthDist, "../textures/earth.tga");
-    mars = new Planet(marsR, marsDist, "../textures/mars.tga");
-    jupiter = new Planet(jupiterR, jupiterDist, "../textures/jupiter.tga");
-    saturn = new Planet(saturnR, saturnDist, "../textures/saturn.tga");
-    uranus = new Planet(uranusR, uranusDist, "../textures/uranus.tga");
-    neptune = new Planet(neptuneR, neptuneDist, "../textures/neptune.tga");
+    GLfloat distances[planetCount];
+
+    GLfloat orbitalPeriods[planetCount] = {
+        0.240846,
+        0.615198,
+        1,
+        1.9,
+        11.9,
+        29.5,
+        84.0,
+        164.8};
+
+    float distance = sunR;
+    for (int i = 0; i < planetCount; ++i)
+    {
+        distance += spacing;
+        distance += radiuses[i];
+        distance += radiuses[i];
+
+        const GLfloat timeScale = 0.5;
+
+        GLfloat orbitalAngularSpeed = timeScale / orbitalPeriods[i];
+
+        planets[i] = new Planet(radiuses[i], distance, orbitalAngularSpeed, 0.05, textures[i]);
+    }
 
     // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
@@ -152,20 +171,24 @@ void init(void)
     setupMaterial();
 }
 
-void changeSize(GLsizei horizontal, GLsizei vertical)
+void changeSize(int horizontal, int vertical)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70, 1.0, 1.0, 300.0);
 
-    if (horizontal <= vertical)
-    {
-        glViewport(0, (vertical - horizontal) / 2, horizontal, horizontal);
-    }
-    else
-    {
-        glViewport((horizontal - vertical) / 2, 0, vertical, vertical);
-    }
+    GLfloat aspect = (GLfloat)horizontal / (GLfloat)vertical;
+
+    glViewport(0, 0, (GLsizei)horizontal, (GLsizei)vertical);
+    gluPerspective(70, aspect, 0.1, skyR * 3);
+
+    // if (horizontal <= vertical)
+    // {
+    //     glViewport(0, (vertical - horizontal) / 2, horizontal, horizontal);
+    // }
+    // else
+    // {
+    //     // glViewport((horizontal - vertical) / 2, 0, horizontal, vertical);
+    // }
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -310,7 +333,6 @@ void setupMaterial()
     // Ustawienie parametrów materiału i źródła światła
 
     lightPoint->setup();
-    // blueLightPoint->setup();
 
     /*************************************************************************************/
     // Ustawienie patrametrów materiału
@@ -327,7 +349,6 @@ void setupMaterial()
     glEnable(GL_LIGHTING);   // właczenie systemu oświetlenia sceny
 
     lightPoint->enable();
-    // blueLightPoint->enable();
 
     glEnable(GL_DEPTH_TEST); // włączenie mechanizmu z-bufora
 
@@ -336,14 +357,11 @@ void setupMaterial()
 
 void update(int value)
 {
-    mercury->update();
-    venus->update();
-    earth->update();
-    mars->update();
-    jupiter->update();
-    saturn->update();
-    uranus->update();
-    neptune->update();
+
+    for (Planet *planet : planets)
+    {
+        planet->update();
+    }
 
     glutTimerFunc(updateInterval, update, 0);
     glutPostRedisplay();
