@@ -10,6 +10,7 @@ protected:
     Texture *texture;
     GLfloat distFromTheSun;
     GLfloat radius;
+
     GLfloat orbitalAngularSpeed;
     GLfloat rotationalAngularSpeed;
 
@@ -18,13 +19,9 @@ protected:
 
 public:
     Planet(GLfloat radius, GLfloat distFromTheSun, const char *textureName);
-
     ~Planet();
-
     void display();
-
     void update();
-
     GLfloat wrapTo360(GLfloat angle);
 };
 

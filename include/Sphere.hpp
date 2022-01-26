@@ -44,6 +44,7 @@ public:
     void calculateNormals();
     void drawNormal(Vertex *v);
     void setDrawNormals(bool drawNormals);
+    void invertNormals();
 };
 
 #endif

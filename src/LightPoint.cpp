@@ -7,7 +7,7 @@ LightPoint::LightPoint(GLfloat x, GLfloat y, GLfloat z, GLenum identifier)
     this->pos[0] = x;
     this->pos[1] = y;
     this->pos[2] = z;
-    this->pos[3] = 1.0;
+    this->pos[3] = 1.f;
 
     ambient[0] = 0.1;
     ambient[1] = 0.1;
@@ -30,6 +30,8 @@ LightPoint::LightPoint(GLfloat x, GLfloat y, GLfloat z, GLenum identifier)
     att_quadratic = {0.001};
 
     this->identifier = identifier;
+
+    updatePos();
 }
 
 void LightPoint::setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat w)
@@ -58,7 +60,7 @@ void LightPoint::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat w)
 
 void LightPoint::updatePos()
 {
-    // glLightfv(identifier, GL_POSITION, pos);
+    glLightfv(identifier, GL_POSITION, pos);
 }
 void LightPoint::setup()
 {

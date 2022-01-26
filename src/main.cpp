@@ -52,6 +52,8 @@ void drawAxes(void)
 
 void renderScene(void)
 {
+    redLightPoint->updatePos();
+
     if (mouseStatus == MouseStatus::leftDown)
     {
 
@@ -69,7 +71,6 @@ void renderScene(void)
 
     glLoadIdentity();
 
-    redLightPoint->updatePos();
     viewer->updatePos();
     drawAxes();
 
@@ -124,6 +125,7 @@ void init(void)
     float neptuneDist = uranusDist + uranusR + neptuneR + spacing;
 
     sun = new Planet(sunR, 0.0, "../textures/sun.tga");
+    sun->invertNormals();
 
     mercury = new Planet(mercuryR, mercuryDist, "../textures/mercury.tga");
     venus = new Planet(venusR, venusDist, "../textures/venus.tga");
@@ -137,7 +139,7 @@ void init(void)
     // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
-    redLightPoint = new LightPoint(0.0, 1.0, 0.0, GL_LIGHT0);
+    redLightPoint = new LightPoint(0.0, 0.00001, 0.0, GL_LIGHT0);
 
     redLightPoint->setAmbient(0.1, 0.1, 0.1, 1.0);
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -154,7 +156,7 @@ void changeSize(GLsizei horizontal, GLsizei vertical)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70, 1.0, 1.0, 30000.0);
+    gluPerspective(70, 1.0, 1.0, 300.0);
 
     if (horizontal <= vertical)
     {
@@ -200,14 +202,6 @@ void motion(GLsizei x, GLsizei y)
 
     glutPostRedisplay();
 }
-
-// void lightControlMode()
-// {
-//     controlMode = 1;
-//     printf("\nSterowanie polezoniem zrodla swiatla\n\n");
-//     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
-//     printf("Przy wcisnietym prawym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
-// }
 
 void viewerControlMode()
 {
@@ -265,12 +259,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // lightControlMode();
     viewerControlMode();
-
-    printf("Sterowanie: \n");
-    printf("Klawisz \"1\" - przelaczenie trybu na sterowanie polozeniem swiatla\n");
-    printf("Klawisz \"2\" - przelaczenie trybu na sterowanie polozeniem obserwatora\n");
 
     glutInit(&argc, argv);
 
@@ -301,10 +290,14 @@ void setupMaterial()
 {
     // Definicja materiału z jakiego zrobiony jest czajnik
 
-    GLfloat mat_ambient[] = {1.0, 1.0, 1.0, 1.0};
+    // GLfloat mat_ambient[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat mat_ambient[] = {0.0, 0.0, 0.0, 1.0};
+
     // współczynniki ka =[kar,kag,kab] dla światła otoczenia
 
     GLfloat mat_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    // GLfloat mat_diffuse[] = {0.0, 0.0, 0.0, 0.0};
+
     // współczynniki kd =[kdr,kdg,kdb] światła rozproszonego
 
     GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};

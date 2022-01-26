@@ -212,3 +212,14 @@ void Sphere::setDisplayMode(DisplayMode mode)
 {
     this->displayMode = mode;
 }
+
+void Sphere::invertNormals()
+{
+    for (int i = 0; i < stackCount; ++i)
+    {
+        for (int j = 0; j < sectorCount; ++j)
+        {
+            vertices[i][j]->normal->invert();
+        }
+    }
+}
