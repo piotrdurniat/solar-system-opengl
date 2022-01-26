@@ -7,6 +7,9 @@
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <functional>
 
 #include "LightPoint.hpp"
 #include "Viewer.hpp"
@@ -61,3 +64,5 @@ void keys(unsigned char key, int x, int y);
 int main(int argc, char *argv[]);
 void setupMaterial();
 void loadTexture(const char *fileName);
+void timerStart(std::function<void(void)> func, unsigned int interval);
+void update(int i);

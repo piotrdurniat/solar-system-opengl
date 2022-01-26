@@ -43,18 +43,12 @@ public:
     // the direction the light is pointed to (theta)
     GLfloat theta;
 
-    // The elevation angle(phi)
-    GLfloat phi;
-    GLfloat r;
-
     GLenum identifier;
 
     LightPoint(GLfloat phi, GLfloat theta, GLfloat r, GLenum identifier);
     void setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat w);
     void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat w);
     void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat w);
-    void thetaAdd(GLfloat x);
-    void phiAdd(GLfloat x);
     void updatePos();
     void setup();
     void enable();

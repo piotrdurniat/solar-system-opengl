@@ -3,9 +3,10 @@
 
 namespace po = boost::program_options;
 
-int controlMode = 1;
-int viewModel = 1;
 bool displayNormals = false;
+
+// Time in ms between each update
+int updateInterval = 15;
 
 void drawAxes(void)
 {
@@ -53,41 +54,23 @@ void renderScene(void)
 {
     if (mouseStatus == MouseStatus::leftDown)
     {
-        if (controlMode == 2)
-        {
-            viewer->thetaAdd(mousePosDiff[0] * pix2angle);
-            viewer->phiAdd(mousePosDiff[1] * pix2angle);
-        }
-        else
-        {
-            redLightPoint->thetaAdd(-mousePosDiff[0] * pix2angle);
-            redLightPoint->phiAdd(-mousePosDiff[1] * pix2angle);
-        }
+
+        viewer->thetaAdd(mousePosDiff[0] * pix2angle);
+        viewer->phiAdd(mousePosDiff[1] * pix2angle);
     }
     else if (mouseStatus == MouseStatus::rightDown)
     {
 
-        if (controlMode == 2)
-        {
-            const float zoomSpeed = 0.05;
-            viewer->rAdd(zoomSpeed * mousePosDiff[1]);
-        }
-        else
-        {
-            // blueLightPoint->thetaAdd(-mousePosDiff[0] * pix2angle);
-            // blueLightPoint->phiAdd(-mousePosDiff[1] * pix2angle);
-        }
+        const float zoomSpeed = 0.05;
+        viewer->rAdd(zoomSpeed * mousePosDiff[1]);
     }
-
-    // blueLightPoint->updatePos();
-    redLightPoint->updatePos();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
 
+    redLightPoint->updatePos();
     viewer->updatePos();
-
     drawAxes();
 
     sun->display();
@@ -154,7 +137,7 @@ void init(void)
     // ->setDrawNormals(displayNormals);
     viewer = new Viewer();
 
-    redLightPoint = new LightPoint(0.5, 0.5, 14.0, GL_LIGHT0);
+    redLightPoint = new LightPoint(0.0, 1.0, 0.0, GL_LIGHT0);
 
     redLightPoint->setAmbient(0.1, 0.1, 0.1, 1.0);
     redLightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -218,17 +201,17 @@ void motion(GLsizei x, GLsizei y)
     glutPostRedisplay();
 }
 
-void lightControlMode()
-{
-    controlMode = 1;
-    printf("\nSterowanie polezoniem zrodla swiatla\n\n");
-    printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
-    printf("Przy wcisnietym prawym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
-}
+// void lightControlMode()
+// {
+//     controlMode = 1;
+//     printf("\nSterowanie polezoniem zrodla swiatla\n\n");
+//     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
+//     printf("Przy wcisnietym prawym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta dla zrodla.\n");
+// }
 
 void viewerControlMode()
 {
-    controlMode = 2;
+    // controlMode = 2;
     printf("\nSterowanie polozeniem obserwatora\n\n");
     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta.\n");
     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku pionowym powoduje proporcjonalna zmiane kata elewacji Phi.\n");
@@ -237,16 +220,8 @@ void viewerControlMode()
 
 void keys(unsigned char key, int x, int y)
 {
-    switch (key)
-    {
-    case '1':
-        lightControlMode();
-        break;
-    case '2':
-        viewerControlMode();
-        break;
-    }
-    renderScene();
+
+    // renderScene();
 }
 
 int main(int argc, char *argv[])
@@ -290,7 +265,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    lightControlMode();
+    // lightControlMode();
+    viewerControlMode();
 
     printf("Sterowanie: \n");
     printf("Klawisz \"1\" - przelaczenie trybu na sterowanie polozeniem swiatla\n");
@@ -311,6 +287,10 @@ int main(int argc, char *argv[])
     glutMotionFunc(motion);
 
     init();
+
+    // timerStart(update, 150);
+    glutTimerFunc(updateInterval, update, 100);
+
     glEnable(GL_DEPTH_TEST);
     glutMainLoop();
 
@@ -361,16 +341,47 @@ void setupMaterial()
     /*************************************************************************************/
 }
 
-// void loadTexture(const char *fileName)
-// {
-//     GLbyte *pBytes;
-//     GLint ImWidth, ImHeight, ImComponents;
-//     GLenum ImFormat;
+void update(int value)
+{
 
-//     //  Load texture
-//     pBytes = Texture::LoadTGAImage(fileName, &ImWidth, &ImHeight, &ImComponents, &ImFormat);
-//     // Define texture
-//     glTexImage2D(GL_TEXTURE_2D, 0, ImComponents, ImWidth, ImHeight, 0, ImFormat, GL_UNSIGNED_BYTE, pBytes);
-//     // Free memory
-//     free(pBytes);
-// }
+    // const int desiredFPS = 120;
+    // glutTimerFunc(1000 / desiredFPS, timer, ++value);
+
+    // //put your specific idle code here
+    // //... this code will run at desiredFPS
+    // char spinner[] = {'|', '/', '-', '~', '\\'};
+    // printf("%c", spinner[value % sizeof(spinner) / sizeof(char)]);
+    // //end your specific idle code here
+
+    // // FPS(); //only call once per frame loop to measure FPS
+    // sun->update();
+
+    mercury->update();
+    venus->update();
+    earth->update();
+    mars->update();
+    jupiter->update();
+    saturn->update();
+    uranus->update();
+    neptune->update();
+
+    glutTimerFunc(updateInterval, update, 0);
+
+    glutPostRedisplay();
+
+    // glutPostRedisplay();
+}
+
+void timerStart(std::function<void(void)> func, unsigned int interval)
+{
+    std::thread([func, interval]()
+                {
+                    while (true)
+                    {
+                        auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
+                        func();
+                        std::this_thread::sleep_until(x);
+                    }
+                })
+        .detach();
+}

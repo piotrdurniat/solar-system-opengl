@@ -1,8 +1,14 @@
 #include <LightPoint.hpp>
 #include <cmath>
 
-LightPoint::LightPoint(GLfloat phi, GLfloat theta, GLfloat r, GLenum identifier)
+LightPoint::LightPoint(GLfloat x, GLfloat y, GLfloat z, GLenum identifier)
 {
+
+    this->pos[0] = x;
+    this->pos[1] = y;
+    this->pos[2] = z;
+    this->pos[3] = 1.0;
+
     ambient[0] = 0.1;
     ambient[1] = 0.1;
     ambient[2] = 0.1;
@@ -23,14 +29,7 @@ LightPoint::LightPoint(GLfloat phi, GLfloat theta, GLfloat r, GLenum identifier)
     att_linear = {0.05};
     att_quadratic = {0.001};
 
-    this->pos[3] = 1.0;
-
-    this->theta = theta;
-    this->phi = phi;
-    this->r = r;
     this->identifier = identifier;
-
-    updatePos();
 }
 
 void LightPoint::setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat w)
@@ -57,25 +56,10 @@ void LightPoint::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat w)
     diffuse[3] = w;
 }
 
-void LightPoint::thetaAdd(GLfloat x)
-{
-    theta = theta + x;
-}
-
-void LightPoint::phiAdd(GLfloat x)
-{
-    phi = phi + x;
-}
-
 void LightPoint::updatePos()
 {
-    pos[0] = r * cos(theta) * cos(phi);
-    pos[1] = r * sin(phi);
-    pos[2] = r * sin(theta) * cos(phi);
-
-    glLightfv(identifier, GL_POSITION, pos);
+    // glLightfv(identifier, GL_POSITION, pos);
 }
-
 void LightPoint::setup()
 {
     glLightfv(identifier, GL_AMBIENT, ambient);
