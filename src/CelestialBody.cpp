@@ -28,7 +28,6 @@ void CelestialBody::setAxialTilt(GLfloat axialTilt)
 
 void CelestialBody::display()
 {
-    texture->set();
 
     glPushMatrix();
 
@@ -43,6 +42,7 @@ void CelestialBody::display()
     glRotatef(axialTilt, 1, 0, 0);
 
     glRotatef(rotationAngle, 0, 1, 0);
+    texture->set();
 
     this->Sphere::display();
 

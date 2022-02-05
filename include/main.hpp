@@ -4,7 +4,8 @@
 #endif
 
 #include <GL/gl.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
+
 #include <cmath>
 #include <iostream>
 #include <chrono>

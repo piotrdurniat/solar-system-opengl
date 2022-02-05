@@ -32,19 +32,16 @@ void Sphere::transformVertices()
 
     for (int i = 0; i < stackCount; ++i)
     {
-        float stackAngle = M_PI / 2 - i * stackStep; // starting from pi/2 to -pi/2
-        float xy = radius * cosf(stackAngle);        // r * cos(u)
-        float z = radius * sinf(stackAngle);         // r * sin(u)
+        float stackAngle = M_PI / 2 - i * stackStep;
+        float xy = radius * cosf(stackAngle);
+        float z = radius * sinf(stackAngle);
 
-        // add (sectorCount+1) vertices per stack
-        // the first and last vertices have same position and normal, but different tex coords
         for (int j = 0; j < sectorCount; ++j)
         {
-            float sectorAngle = j * sectorStep; // starting from 0 to 2pi
+            float sectorAngle = j * sectorStep;
 
-            // vertex position
-            float x = xy * cosf(sectorAngle); // r * cos(u) * cos(v)
-            float y = xy * sinf(sectorAngle); // r * cos(u) * sin(v)
+            float x = xy * cosf(sectorAngle);
+            float y = xy * sinf(sectorAngle);
 
             vertices[i][j]->setPos(x, y, z);
 

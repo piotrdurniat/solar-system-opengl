@@ -6,7 +6,7 @@
 #endif
 
 #include <GL/gl.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <fstream>
 
 class Texture
@@ -21,17 +21,6 @@ public:
 
     void set();
 
-    /*************************************************************************************/
-    // Funkcja wczytuje dane obrazu zapisanego w formacie TGA w pliku o nazwie
-    // FileName, alokuje pamięć i zwraca wskaźnik (pBits) do bufora w którym
-    // umieszczone są dane.
-    // Ponadto udostępnia szerokość (ImWidth), wysokość (ImHeight) obrazu
-    // tekstury oraz dane opisujące format obrazu według specyfikacji OpenGL
-    // (ImComponents) i (ImFormat).
-    // Jest to bardzo uproszczona wersja funkcji wczytującej dane z pliku TGA.
-    // Działa tylko dla obrazów wykorzystujących 8, 24, or 32 bitowy kolor.
-    // Nie obsługuje plików w formacie TGA kodowanych z kompresją RLE.
-    /*************************************************************************************/
     static GLbyte *LoadTGAImage(const char *FileName, GLint *ImWidth, GLint *ImHeight, GLint *ImComponents, GLenum *ImFormat);
 };
 
