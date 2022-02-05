@@ -45,14 +45,11 @@ void Sphere::transformVertices()
 
             vertices[i][j]->setPos(x, y, z);
 
-            // normalized vertex normal
             float nx = x * lengthInv;
             float ny = y * lengthInv;
             float nz = z * lengthInv;
             vertices[i][j]->setNormal(nx, ny, nz);
-            // addNormal(nx, ny, nz);
 
-            // // vertex tex coord between [0, 1]
             float s = (float)j / (sectorCount - 1);
             float t = (float)i / (stackCount - 1);
             vertices[i][j]->setTexturePos(s, t);
