@@ -37,7 +37,7 @@ GLbyte *Texture::LoadTGAImage(const char *FileName, GLint *ImWidth, GLint *ImHei
     short sDepth;
     GLbyte *pbitsperpixel = NULL;
 
-    // Wartości domyślne zwracane w przypadku błędu
+    // Default values returned in case of an error
     *ImWidth = 0;
     *ImHeight = 0;
     *ImFormat = GL_BGR_EXT;
@@ -46,22 +46,21 @@ GLbyte *Texture::LoadTGAImage(const char *FileName, GLint *ImWidth, GLint *ImHei
     pFile = fopen(FileName, "rb");
     if (pFile == NULL)
         return NULL;
-    // Przeczytanie nagłówka pliku
+    // Read the file header
     if (fread(&tgaHeader, sizeof(TGAHEADER), 1, pFile) != 1)
     {
         return NULL;
     }
-    // Odczytanie szerokości, wysokości i głębi obrazu
+    // Read width, height and depth
     *ImWidth = tgaHeader.width;
     *ImHeight = tgaHeader.height;
     sDepth = tgaHeader.bitsperpixel / 8;
-    // Sprawdzenie, czy głębia spełnia założone warunki (8, 24, lub 32 bity)
+    // Check if depth is (8, 24, or 32 bits)
     if (tgaHeader.bitsperpixel != 8 && tgaHeader.bitsperpixel != 24 && tgaHeader.bitsperpixel != 32)
         return NULL;
 
-    // Obliczenie rozmiaru bufora w pamięci
+    // Calculate buffer size
     lImageSize = tgaHeader.width * tgaHeader.height * sDepth;
-    // Alokacja pamięci dla danych obrazu
     pbitsperpixel = (GLbyte *)malloc(lImageSize * sizeof(GLbyte));
 
     if (pbitsperpixel == NULL)
@@ -75,7 +74,6 @@ GLbyte *Texture::LoadTGAImage(const char *FileName, GLint *ImWidth, GLint *ImHei
         return NULL;
     }
 
-    // Ustawienie formatu OpenGL
     switch (sDepth)
     {
     case 3:

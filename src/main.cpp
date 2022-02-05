@@ -10,48 +10,6 @@ int updateInterval = 15;
 
 GLfloat skyR = 100000;
 
-void drawAxes(void)
-{
-    // Start and end position for X axis
-    point3 xStart = {-5.0, 0.0, 0.0};
-    point3 xEnd = {5.0, 0.0, 0.0};
-
-    // Start and end position for Y axis
-    point3 yStart = {0.0, -5.0, 0.0};
-    point3 yEnd = {0.0, 5.0, 0.0};
-
-    // Start and end position for Z axis
-    point3 zStart = {0.0, 0.0, -5.0};
-    point3 zEnd = {0.0, 0.0, 5.0};
-
-    // Red drawing color
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_LINES);
-
-    glVertex3fv(xStart);
-    glVertex3fv(xEnd);
-
-    glEnd();
-
-    // Green drawing color
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glBegin(GL_LINES);
-
-    glVertex3fv(yStart);
-    glVertex3fv(yEnd);
-
-    glEnd();
-
-    // Blue drawing color
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glBegin(GL_LINES);
-
-    glVertex3fv(zStart);
-    glVertex3fv(zEnd);
-
-    glEnd();
-}
-
 void renderScene(void)
 {
     lightPoint->updatePos();
@@ -74,7 +32,6 @@ void renderScene(void)
     glLoadIdentity();
 
     viewer->updatePos();
-    // drawAxes();
 
     sun->display();
     sky->display();
@@ -173,8 +130,6 @@ void init(void)
     lightPoint->setDiffuse(1.0, 1.0, 1.0, 1.0);
     lightPoint->setSpecular(1.0, 1.0, 1.0, 1.0);
 
-    // sphere->setDisplayMode(DisplayMode::filledTriangles);
-
     // background color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     setupMaterial();
@@ -189,15 +144,6 @@ void changeSize(int horizontal, int vertical)
 
     glViewport(0, 0, (GLsizei)horizontal, (GLsizei)vertical);
     gluPerspective(70, aspect, 0.1, skyR * 3);
-
-    // if (horizontal <= vertical)
-    // {
-    //     glViewport(0, (vertical - horizontal) / 2, horizontal, horizontal);
-    // }
-    // else
-    // {
-    //     // glViewport((horizontal - vertical) / 2, 0, horizontal, vertical);
-    // }
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -237,7 +183,6 @@ void motion(GLsizei x, GLsizei y)
 
 void viewerControlMode()
 {
-    // controlMode = 2;
     printf("\nSterowanie polozeniem obserwatora\n\n");
     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku poziomym powoduje proporcjonalna zmiane azymutu kata Theta.\n");
     printf("Przy wcisnietym lewym klawiszu myszy, ruch kursora myszy w kierunku pionowym powoduje proporcjonalna zmiane kata elewacji Phi.\n");
@@ -320,48 +265,22 @@ int main(int argc, char *argv[])
 
 void setupMaterial()
 {
-    // Definicja materiału z jakiego zrobiony jest czajnik
-
-    // GLfloat mat_ambient[] = {1.0, 1.0, 1.0, 1.0};
     GLfloat mat_ambient[] = {0.0, 0.0, 0.0, 1.0};
-
-    // współczynniki ka =[kar,kag,kab] dla światła otoczenia
-
     GLfloat mat_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-    // GLfloat mat_diffuse[] = {0.0, 0.0, 0.0, 0.0};
-
-    // współczynniki kd =[kdr,kdg,kdb] światła rozproszonego
-
     GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
-    // współczynniki ks =[ksr,ksg,ksb] dla światła odbitego
-
     GLfloat mat_shininess = {20.0};
-    // współczynnik n opisujący połysk powierzchni
-
-    /*************************************************************************************/
-    // Ustawienie parametrów materiału i źródła światła
-
     lightPoint->setup();
-
-    /*************************************************************************************/
-    // Ustawienie patrametrów materiału
-
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
 
-    /*************************************************************************************/
-    // Ustawienie opcji systemu oświetlania sceny
-
-    glShadeModel(GL_SMOOTH); // właczenie łagodnego cieniowania
-    glEnable(GL_LIGHTING);   // właczenie systemu oświetlenia sceny
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_LIGHTING);
 
     lightPoint->enable();
 
-    glEnable(GL_DEPTH_TEST); // włączenie mechanizmu z-bufora
-
-    /*************************************************************************************/
+    glEnable(GL_DEPTH_TEST);
 }
 
 void update(int value)
@@ -385,7 +304,6 @@ void timerStart(std::function<void(void)> func, unsigned int interval)
                         auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
                         func();
                         std::this_thread::sleep_until(x);
-                    }
-                })
+                    } })
         .detach();
 }

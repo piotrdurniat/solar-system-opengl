@@ -11,36 +11,15 @@
 class LightPoint
 {
 public:
-    // położenie źródła
     GLfloat pos[4];
-
-    // składowe intensywności świecenia źródła światła otoczenia
-    // Ia = [Iar,Iag,Iab]
     GLfloat ambient[4];
-
-    // składowe intensywności świecenia źródła światła powodującego
-    // odbicie dyfuzyjne Id = [Idr,Idg,Idb]
     GLfloat diffuse[4];
-
-    // składowe intensywności świecenia źródła światła powodującego
-    // odbicie kierunkowe Is = [Isr,Isg,Isb]
     GLfloat specular[4];
-
-    // składowa stała ds dla modelu zmian oświetlenia w funkcji
-    // odległości od źródła
     GLfloat att_constant;
-
-    // składowa liniowa dl dla modelu zmian oświetlenia w funkcji
-    // odległości od źródła
     GLfloat att_linear;
-
-    /*
-     * składowa kwadratowa dq dla modelu zmian oświetlenia w funkcji
-     * odległości od źródła
-     */
     GLfloat att_quadratic;
 
-    // the direction the light is pointed to (theta)
+    // Angle of the direction the light is pointed to
     GLfloat theta;
 
     GLenum identifier;
