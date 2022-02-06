@@ -1,4 +1,10 @@
-# GKiKCK - lab5
+# A simple 3D model of the Solar System
+
+Written in C++ using OpenGL and FreeGLUT library.
+
+## Screenshot
+
+![Screenshot of the program execution](./screenshots/solar-system.png)
 
 ## Generate a native build system:
 
@@ -31,7 +37,3 @@ In `release` or `debug` directory:
 ```sh
 ./main
 ```
-
-## Command line arguments:
-
-- `-n number_of_vertices` - Set number of vertices (deault is 40)

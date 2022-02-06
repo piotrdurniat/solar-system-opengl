@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 
     glutInitWindowSize(800, 800);
 
-    glutCreateWindow("GKiKCK - laboratorium 7");
+    glutCreateWindow("Solar system model");
 
     glutDisplayFunc(renderScene);
     glutReshapeFunc(changeSize);

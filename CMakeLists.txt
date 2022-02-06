@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-project("gkikck-lab6")
+project("solar-system")
 
 if (WIN32)
     set(Boost_ADDITIONAL_VERSIONS 1.78.0)
