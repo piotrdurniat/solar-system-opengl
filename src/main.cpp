@@ -79,7 +79,6 @@ void init(void)
         "../textures/uranus.tga",
         "../textures/neptune.tga"};
 
-    // I know, sun is not a planet...
     sun = new CelestialBody(sunR, 0.0, 0.0, 0.0, "../textures/sun.tga");
     sky = new CelestialBody(skyR, 0.0, 0.0, 0.0, "../textures/sky.tga");
 
@@ -254,7 +253,6 @@ int main(int argc, char *argv[])
 
     init();
 
-    // timerStart(update, 150);
     glutTimerFunc(updateInterval, update, 100);
 
     glEnable(GL_DEPTH_TEST);
